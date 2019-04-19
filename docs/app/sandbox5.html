@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>kinaphar.jp - app - 所持金メーター(2016年2月21日開発中)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/custom.css" rel="stylesheet" media="screen">
+    <link href="syojikin.css" rel="stylesheet" media="screen">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha256-Whc+9091keLVBxbyK4U697hqB4bcED+6LC64E9GuJkk= sha512-9PPlANXApnRCz1LMx2LPWwRfOKkWjQvH98q2lkxEG6/r6YVoQ+F48btbiuOpDsWHjpZrCfcGrPoVenVl69V09A==" crossorigin="anonymous">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- 以下色々追加 -->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script language="javascript" type="text/javascript" src="/js/jquery.jqplot.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/jquery.jqplot.min.css" />
+
+    <!-- Touch Punch -->
+    <script src="/js/jquery.ui.touch-punch.min.js"></script>
+    <script>
+        $('#widget').draggable();
+    </script>
+
+
+    <!-- スタイル指定→syojikin.cssに引き継ぎ -->
+
+    <!-- javascript -->
+    <script>
+        /* スライダー */
+        function marumeru(num) {
+            var numnum = num / 100;
+            return Math.round(numnum) * 100;
+        }
+
+        function refreshAccount() {
+            var account1 = $("#account1").slider("value"),
+                account2 = $("#account2").slider("value"),
+                account3 = $("#account3").slider("value");
+            var account1round = marumeru(account1),
+                account2round = marumeru(account2),
+                account3round = marumeru(account3);
+            $(".account1 .now").text(account1round);
+            $(".account2 .now").text(account2round);
+            $(".account3 .now").text(account3round);
+            $
+        }
+        $(function () {
+            $("#account1, #account2, #account3").slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 10000,
+                value: 5000,
+                slide: refreshAccount,
+                change: refreshAccount
+            });
+        });
+        
+        /* jqplotグラフ描画 */
+        
+jQuery( function() {
+    jQuery . jqplot(
+        'moneygraph',
+        [
+            [ [ 1, account1round ], [ 2, 16000 ], [ 3, 14000 ], [ 4, 9000 ], [ 5, 5000 ], [ 6, 2000 ] ]
+        ],
+        {
+            axes:{
+                xaxis:{
+                    label:'月'
+                },
+                yaxis:{
+                    label:'残金'
+                }
+            }
+        }
+    );
+} );
+    </script>
+</head>
+
+
+<body class="ui-widget-content" style="border: 0;">
+
+    <!-- navigation -->
+
+    <!-- container -->
+
+    <div class="container">
+        <!-- header -->
+
+        <!-- maindish -->
+        <h3>所持金メーター</h3>
+        <hr>
+        
+        <div id="moneygraph" style="height: 300px; width: 300px;"></div>
+        
+        <table class="account1">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">???</td>
+                <td class="max">10000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>財布</h4>
+                </td>
+                <td colspan="3">
+                    <div id="account1"></div>
+                </td>
+            </tr>
+        </table>
+
+
+        <table class="account2">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">???</td>
+                <td class="max">10000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>口座A</h4>
+                </td>
+                <td colspan="3">
+                    <div id="account2"></div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="account3">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">???</td>
+                <td class="max">10000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>口座A</h4>
+                </td>
+                <td colspan="3">
+                    <div id="account3"></div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <hr>
+    <h3>砂場</h3>
+       
+       
+       <!-- グラフグラフグラフグラフグラフグラフグラフグラフグラフグラフ -->
+       
+        
+        
+
+    <h4>メモ帳（入力すると自動保存：ブラウザ更新しても残る）</h4>
+
+    <textarea id="memo" rows="10" cols="40" name="40"></textarea>
+    <p>
+        <input type="button" id="clear" value="消去">
+        <input type="button" id="memo1" value="メモ1">
+        <input type="button" id="memo2" value="メモ2">
+        <input type="button" id="memo3" value="メモ3">
+    </p>
+    <script>
+        $(function () {
+
+            if (localStorage.getItem('memo')) {
+                $('#memo').val(localStorage.getItem('memo'));
+            }
+
+            /* ボタン 消去 */
+            $('#clear').click(function () {
+                $('#memo').val('');
+                localStorage.removeItem('memo');
+            });
+            
+            /* リアルタイム保存 */
+            $('#memo').bind('keyup', function () {
+                localStorage.setItem('memo', $('#memo').val());
+            });
+            
+            /**/
+            $('#memo1').
+
+        });
+    </script>
+
+    <br>
+    <br>
+
+    <input type="date" value="今日">
+    <textarea id="zandaka" rows="1" cols="40" name="40"></textarea>
+    <p>
+        <input type="button" id="clear" value="消去">
+    </p>
+    <script>
+        $(function () {
+            $('#clear-zandaka').click(function () {
+                $('#memo').val('');
+                localStorage.removeItem('memo');
+            });
+
+            $('#memo').bind('keyup', function () {
+                localStorage.setItem('memo', $('#memo').val());
+            });
+
+        });
+    </script>
+    
+    
+    
+    <script>
+
+//今日の日付データを変数hidukeに格納
+var hiduke=new Date(); 
+
+//年・月・日・曜日を取得する
+var year = hiduke.getFullYear();
+var month = hiduke.getMonth()+1;
+var week = hiduke.getDay();
+var day = hiduke.getDate();
+
+var yobi= new Array("日","月","火","水","木","金","土");
+
+document.write("西暦"+year+"年"+month+"月"+day+"日 "+yobi[week]+"曜日");
+
+</script>
+    
+    
+    <script>
+
+//時刻データを取得して変数jikanに格納する
+var jikan= new Date();
+
+//時・分・秒を取得する
+var hour = jikan.getHours();
+var minute = jikan.getMinutes();
+var second = jikan.getSeconds();
+
+document.write(hour+"時",+minute+"分"+second+"秒");
+
+</script>
+   
+   
+    
+    
+
+    <!-- footer -->
+    <div id="footer" style="color:#FFFFFF; text-align:right; padding-right:10px; background:#000000;">
+        2016 kinaphar
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>kinaphar.jp - app - 所持金メーター(2016年2月21日開発中)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/custom.css" rel="stylesheet" media="screen">
+    <link href="syojikin.css" rel="stylesheet" media="screen">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha256-Whc+9091keLVBxbyK4U697hqB4bcED+6LC64E9GuJkk= sha512-9PPlANXApnRCz1LMx2LPWwRfOKkWjQvH98q2lkxEG6/r6YVoQ+F48btbiuOpDsWHjpZrCfcGrPoVenVl69V09A==" crossorigin="anonymous">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- 以下色々追加 -->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+
+    <!-- Touch Punch -->
+    <script src="/js/jquery.ui.touch-punch.min.js"></script>
+    <script>
+        $('#widget').draggable();
+    </script>
+
+
+    <!-- スタイル指定→syojikin.cssに引き継ぎ -->
+
+    <!-- javascript -->
+    <script>
+        function marumeru(num){
+            var numnum = num/100;
+            return Math.round(numnum) * 100;
+        }
+        
+        function refreshSwatch() {
+            var account1 = $( "#account1" ).slider( "value" ),
+              account2 = $( "#account2" ).slider( "value" ),
+              account3 = $( "#account3" ).slider( "value" );
+            var account1account1 = marumeru(account1),
+                account2account2 = marumeru(account2),
+                account3account3 = marumeru(account3);
+              $(".account1 .now").text(account1account1);
+              $(".account2 .now").text(account2account2);
+              $(".account3 .now").text(account3account3);
+          }
+        $(function () {
+            $("#account1, #account2, #account3").slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 10000,
+                value: 5000,
+                slide: refreshSwatch,
+                change: refreshSwatch
+            });
+        });
+    </script>
+
+</head>
+
+
+<body class="ui-widget-content" style="border: 0;">
+
+    <!-- navigation -->
+
+    <nav class="navbar navbar-default navbar-fixed-top" style="margin:0;">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".target">
+                <div style="float : left; margin-right: 10px; color: #ffffff;">MENU</div>
+                <div style="float : right;">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </div>
+            </button>
+            <a class="navbar-brand" href="http://kinaphar.jp/index.html">kinaphar.jp</a>
+        </div>
+        <div class="collapse navbar-collapse target">
+            <ul class="nav navbar-nav">
+                <li><a href="/index.html">Top</a></li>
+                <li><a href="/about/index.html">about</a></li>
+                <li><a href="/music/index.html">music</a></li>
+                <li class="active"><a href="/app/index.html">app</a></li>
+                <li><a href="/illust/index.html">illust</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- container -->
+
+    <div class="container">
+        <!-- header -->
+
+        <!-- maindish -->
+        <h3>所持金メーター</h3>
+        <hr>
+        
+        <table class="account1">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">???</td>
+                <td class="max">10000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>財布</h4>
+                </td>
+                <td colspan="3">
+                    <div id="account1"></div>
+                </td>
+            </tr>
+        </table>
+        
+        
+        <table class="account2">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">???</td>
+                <td class="max">10000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>口座A</h4>
+                </td>
+                <td colspan="3">
+                    <div id="account2"></div>
+                </td>
+            </tr>
+        </table>
+        
+        <table class="account3">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">???</td>
+                <td class="max">10000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>口座A</h4>
+                </td>
+                <td colspan="3">
+                    <div id="account3"></div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <hr>
+    <h3>砂場</h3>
+
+    <input type="date" value="今日">
+    <textarea id="zandaka" rows="1" cols="20" name="40"></textarea>
+    <p>
+        <input type="button" id="clear" value="消去">
+        <input type="button" id="save" value="保存">
+    </p>
+    <script>
+        $(function () {
+            $('#clear').click(function () {
+                $('#memo').val('');
+                localStorage.removeItem('memo');
+            });
+
+            $('#memo').bind('keyup', function () {
+                localStorage.setItem('memo', $('#memo').val());
+            });
+
+        });
+    </script>
+    
+    
+    
+</body>
+
+</html>

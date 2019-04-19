@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>kinaphar.jp - app - 所持金メーター</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/custom.css" rel="stylesheet" media="screen">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha256-Whc+9091keLVBxbyK4U697hqB4bcED+6LC64E9GuJkk= sha512-9PPlANXApnRCz1LMx2LPWwRfOKkWjQvH98q2lkxEG6/r6YVoQ+F48btbiuOpDsWHjpZrCfcGrPoVenVl69V09A==" crossorigin="anonymous">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+   
+   
+   <!-- Touch Punch -->
+   <script src="jquery.ui.touch-punch.min.js"></script>
+   <script>$('#widget').draggable();</script>
+   
+   
+    <!-- javascriptを書く所-->
+
+    <!-- 一時停止
+    <script>
+        $(document).ready(function () {
+            var money = 0;
+            var money_max = 10000;
+
+            $('#plus, #minus').on('click', function () {
+                $('div#message').html('<div id="message">wow</div>');
+            });
+
+        });
+    </script>
+    
+-->
+
+    <script type="text/javascript">
+        $(function () {
+            $(document).on('click', '#minus', function () {
+                $("#moneygauge").css({
+                    'width': '0%'
+                });
+            });
+            $(document).on('click', '#plus', function () {
+                $("#moneygauge").css({
+                    'width': '100%'
+                });
+            });
+        })
+        
+        
+        
+  $(function() {
+    $( "#slider" ).slider();
+  });
+  
+    </script>
+
+    <!-- jacascriptここまで -->
+
+
+
+</head>
+
+
+<body>
+
+    <!-- navigation -->
+
+    <nav class="navbar navbar-default navbar-fixed-top" style="margin:0;">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".target">
+                <div style="float : left; margin-right: 10px; color: #ffffff;">MENU</div>
+                <div style="float : right;">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </div>
+            </button>
+            <a class="navbar-brand" href="http://kinaphar.jp/index.html">kinaphar.jp</a>
+        </div>
+        <div class="collapse navbar-collapse target">
+            <ul class="nav navbar-nav">
+                <li><a href="/index.html">Top</a></li>
+                <li><a href="/about/index.html">about</a></li>
+                <li><a href="/music/index.html">music</a></li>
+                <li class="active"><a href="/app/index.html">app</a></li>
+                <li><a href="/illust/index.html">illust</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- container -->
+
+    <div class="container">
+        <!-- header -->
+
+        <!-- maindish -->
+        <div>
+
+            <!-- 実験施設 -->
+            <div id="sandbox">
+                
+                
+                    <h3>砂場</h3>
+<h4>メモ帳（ブラウザ更新しても残る）</h4>
+
+    <textarea id="memo" rows="10" cols="40" name="40"></textarea>
+    <p><input type="button" id="save" value="保存"><input type="button" id="clear" value="消去"></p>
+<script>
+    $(function(){
+        
+        if(localStorage.getItem('memo')){
+            $('#memo').val(localStorage.getItem('memo'));
+        }
+        
+        $('#clear').click(function(){
+            $('#memo').val('');
+            localStorage.removeItem('memo');
+            // localStorage.clear();
+        });
+        
+        $('#save').click(function(){
+            localStorage.setItem('memo', $('#memo').val());
+            // console.log(localStorage.getItem('memo'));
+        });
+        
+        
+        /*
+        localStorage.setItem('memo', 'ほにゃらら');
+        localStorage.getItem('memo');
+        localStorage.removeItem('memo');
+        localStorage.clear('');
+        */
+        
+    });
+    
+    </script>
+
+                
+                
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+    </div>
+    <!-- footer -->
+    <div id="footer" style="color:#FFFFFF; text-align:right; padding-right:10px; background:#000000;">
+        2016 kinaphar
+    </div>
+
+
+
+</body>
+
+</html>

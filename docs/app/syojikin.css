@@ -1,0 +1,66 @@
+#account1,
+#account2,
+#account3,
+#accountsum
+#nengappi{
+    align-self: center;
+    width: 100%;
+    max-width:600px;
+    min-width:200px;
+    margin: 0px;
+}
+
+/* #swatch {
+    width: 120px;
+    height: 100px;
+    margin-top: 18px;
+    margin-left: 350px;
+    background-image: none;
+} */
+
+#account1 .ui-slider-range {
+    background: #ef2929;
+}
+
+#account1 .ui-slider-handle {
+    border-color: #ef2929;
+}
+
+#account2 .ui-slider-range {
+    background: #8ae234;
+}
+
+#account2 .ui-slider-handle {
+    border-color: #8ae234;
+}
+
+#account3 .ui-slider-range {
+    background: #729fcf;
+}
+
+#account3 .ui-slider-handle {
+    border-color: #729fcf;
+}
+
+
+/* 自分で更に追加 */
+table{
+    width:100%;
+    text-align: center;
+}
+
+td{
+    width:25%;
+}
+
+td.min {
+    text-align: left;
+}
+
+td.now {
+    text-align: center;
+}
+
+td.max {
+    text-align: right;
+}

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>所持金メーター | kinaphar.jp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/custom.css" rel="stylesheet" media="screen">
+    <link href="syojikin.css" rel="stylesheet" media="screen">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha256-Whc+9091keLVBxbyK4U697hqB4bcED+6LC64E9GuJkk= sha512-9PPlANXApnRCz1LMx2LPWwRfOKkWjQvH98q2lkxEG6/r6YVoQ+F48btbiuOpDsWHjpZrCfcGrPoVenVl69V09A==" crossorigin="anonymous">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- 以下色々追加 -->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script language="javascript" type="text/javascript" src="/js/jquery.jqplot.min.js"></script>
+    <script language="javascript" type="text/javascript" src="/js/sprintf.js"></script>
+    <script language="javascript" type="text/javascript" src="/js/plugins/jqplot.dateAxisRenderer.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/jquery.jqplot.min.css" />
+
+    <!-- Touch Punch -->
+    <script src="/js/jquery.ui.touch-punch.min.js"></script>
+    <script>
+        $('#widget').draggable();
+    </script>
+
+
+    <!-- スタイル指定→syojikin.cssに引き継ぎ -->
+
+    <!-- javascript -->
+    <script>
+        /* if (localStorage.length == 0) { */
+        localStorage.setItem('zandaka_0_2016-02-01', 0);
+        localStorage.setItem('zandaka_1_2016-02-01', 0);
+        localStorage.setItem('zandaka_2_2016-02-01', 0);
+        localStorage.setItem('zandaka_3_2016-02-01', 0); //変更！！！！！！！！！！
+        /* } */
+    </script>
+
+    <script>
+        function addDate(date, num, interval) {
+            switch (interval) {
+            case 'YYYY':
+                date.setYear(date.getYear() + num);
+                break;
+            case 'MM':
+                date.setMonth(date.getMonth() + num);
+                break;
+            case 'hh':
+                date.setHours(date.getHours() + num);
+                break;
+            case 'mm':
+                date.setMinutes(date.getMinutes() + num);
+                break;
+            case 'ss':
+                date.setSeconds(date.getSeconds() + num);
+                break;
+            default:
+                date.setDate(date.getDate() + num);
+            }
+            return date;
+        }
+
+        function getDiff(date1Str, date2Str) {
+            var date1 = new Date(date1Str);
+            var date2 = new Date(date2Str);
+
+            // getTimeメソッドで経過ミリ秒を取得し、２つの日付の差を求める
+            var msDiff = date2.getTime() - date1.getTime();
+
+            // 求めた差分（ミリ秒）を日付へ変換します（経過ミリ秒÷(1000ミリ秒×60秒×60分×24時間)。端数切り捨て）
+            var daysDiff = Math.floor(msDiff / (1000 * 60 * 60 * 24));
+
+            // 差分へ1日分加算して返却します
+            return ++daysDiff;
+        }
+
+        function getData(account) {
+            /* 日付範囲指定 */
+            var startDate = "2016-02-01";
+            var date = new Date();
+            /* teacher ver.
+            var endDate = sprintf("%4d-%2.2d-%2.2d", date.getFullYear(), date.getMonth() + 1, date.getDate());
+            */
+            var endDate = "2016-02-29";
+            var curDate = startDate;
+            var timeSeries = [];
+            var ndays = getDiff(startDate, endDate);
+            var m = 0;
+            for (var n = 0; n < ndays; n++) {
+                var val = localStorage.getItem('zandaka_' + account + '_' + curDate); //変更！！！！！！！！！！
+                if (typeof val != "object") {
+                    timeSeries.push([curDate, marumeru(val)]);
+                }
+                date = addDate(new Date(curDate), 1);
+                curDate = sprintf("%4d-%2.2d-%2.2d", date.getFullYear(), date.getMonth() + 1, date.getDate());
+            }
+
+            return timeSeries;
+        }
+
+        /* スライダー */
+        function marumeru(num) {
+            var numnum = num / 100;
+            return Math.round(numnum) * 100;
+        }
+
+        function refreshAccount() {
+            var account1 = $("#account1").slider("value"),
+                account2 = $("#account2").slider("value"),
+                account3 = $("#account3").slider("value");
+            var account1value = marumeru(account1),
+                account2value = marumeru(account2),
+                account3value = marumeru(account3);
+            var account0value = account1value + account2value + account3value;
+            $(".account1 .now").text(account1value);
+            $(".account2 .now").text(account2value);
+            $(".account3 .now").text(account3value);
+            $(".accountsum .now").text(account0value);
+            $("#accountsum").slider({
+                value: account0value,
+            });
+
+            if (getData !== null) {
+                var account0Data = getData(0); //変更！！！！！！！！！！
+                var account1Data = getData(1); //変更！！！！！！！！！！
+                var account2Data = getData(2); //変更！！！！！！！！！！
+                var account3Data = getData(3); //変更！！！！！！！！！！
+            }
+
+            jQuery(function () {
+                /* if (accountData !== null) { */
+                jQuery.jqplot(
+                    'moneygraph', [
+                        account0Data, account1Data, account2Data, account3Data
+                     ],
+
+                    {
+                        seriesColors: ['yellow', 'red', 'green', 'blue'],
+                        axes: {
+                            xaxis: {
+                                label: '年月日',
+                                renderer: jQuery.jqplot.DateAxisRenderer,
+                                min: '2016-02-01',
+                                max: '2016-02-29',
+                                /* tickInterval: '1 days',
+                                tickOptions: {
+                                    formatString: '%B' */
+                            },
+                            yaxis: {
+                                label: '残金'
+                            }
+                        }
+                    }
+                ).replot();
+                /* } */
+            });
+            var logdate = $('#date').val();
+            /*
+            for (var account = 0; account <= 3; n++) {}
+            ↓をどうやって入れる？*/
+            localStorage.setItem('zandaka_0_' + logdate, account0value);
+            localStorage.setItem('zandaka_1_' + logdate, account1value);
+            localStorage.setItem('zandaka_2_' + logdate, account2value);
+            localStorage.setItem('zandaka_3_' + logdate, account3value);
+        }
+
+        refreshAccount();
+
+        $(function () {
+            $("#account1, #account2, #account3").slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 100000,
+                value: 0,
+                slide: refreshAccount,
+                change: refreshAccount
+            });
+
+            $("#accountsum").slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 300000,
+                value: 0,
+                disabled: true
+            });
+        });
+    </script>
+</head>
+
+
+<body class="ui-widget-content" style="border: 0;">
+
+    <!-- navigation -->
+
+    <nav class="navbar navbar-default navbar-fixed-top" style="margin:0;">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".target">
+                <div style="float : left; margin-right: 10px; color: #ffffff;">MENU</div>
+                <div style="float : right;">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </div>
+            </button>
+            <a class="navbar-brand" href="http://kinaphar.jp/index.html">kinaphar.jp</a>
+        </div>
+        <div class="collapse navbar-collapse target">
+            <ul class="nav navbar-nav">
+                <li><a href="/index.html">Top</a></li>
+                <li><a href="/about/index.html">about</a></li>
+                <li><a href="/music/index.html">music</a></li>
+                <li class="active"><a href="/app/index.html">app</a></li>
+                <li><a href="/illust/index.html">illust</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- container -->
+
+    <div class="container">
+        <!-- header -->
+
+        <!-- maindish -->
+        <h3><img src="syojikin-coin.jpg" style="height:30px; width:auto;">所持金メーター</h3>
+        <hr>
+
+        <!-- グラフグラフグラフグラフグラフグラフグラフグラフグラフグラフ -->
+        <!-- グラフグラフグラフグラフグラフグラフグラフグラフグラフグラフ -->
+        <!-- グラフグラフグラフグラフグラフグラフグラフグラフグラフグラフ -->
+
+        <div id="moneygraph" style="height: auto; width: auto;"></div>
+        <div id="nengappi">
+            <span>年月日選択</span>
+            <script type="text/javascript" language="javascript">
+                var date = new Date();
+                var endDate = sprintf("%4d-%2.2d-%2.2d", date.getFullYear(), date.getMonth() + 1, date.getDate());
+                document.open();
+                document.write('<input type="date" id="date" value="' + endDate + '">');
+                document.close();
+            </script>
+            <input type="button" id="clear-zandaka" value="消去">
+            <script>
+                $(function () {
+                    $('#clear-zandaka').click(function () {
+                        var today = $('#date').val();
+                        localStorage.removeItem('zandaka_' + today);
+                        $('#date').val('');
+                        $('#zandaka').val('');
+                    });
+                });
+            </script>
+        </div>
+
+        <table class="account1" style="background-color:#ffeeee">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">0</td>
+                <td class="max">100000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>財布残高</h5>
+                </td>
+                <td colspan="3">
+                    <div id="account1"></div>
+                </td>
+            </tr>
+        </table>
+
+
+        <table class="account2" style="background-color:#eeffee">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">0</td>
+                <td class="max">100000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>口座A残高</h5>
+                </td>
+                <td colspan="3">
+                    <div id="account2"></div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="account3" style="background-color:#eeeeff">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">0</td>
+                <td class="max">100000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>口座B残高</h5>
+                </td>
+                <td colspan="3">
+                    <div id="account3"></div>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table class="accountsum" style="background-color:#ffffdd">
+            <tr>
+                <td class="min"></td>
+                <td class="min">0</td>
+                <td class="now">0</td>
+                <td class="max">300000</td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>合計金額</h5>
+                </td>
+                <td colspan="3">
+                    <div id="accountsum"></div>
+                </td>
+            </tr>
+        </table>
+
+        <script>
+            if (localStorage.length == 0) {
+                localStorage.setItem('zandaka_0_2016-02-01', 0);
+                localStorage.setItem('zandaka_1_2016-02-01', 0);
+                localStorage.setItem('zandaka_2_2016-02-01', 0);
+                localStorage.setItem('zandaka_3_2016-02-01', 0); //変更！！！！！！！！！！
+            }
+        </script>
+
+        <input type="button" id="sample" value="サンプルを読み込んでみる">
+        <script>
+            $(function () {
+                /* ボタン 消去 */
+                $('#sample').click(function () {
+                    localStorage.setItem('zandaka_0_2016-02-01', 200000);
+                    localStorage.setItem('zandaka_1_2016-02-01', 0);
+                    localStorage.setItem('zandaka_2_2016-02-01', 100000);
+                    localStorage.setItem('zandaka_3_2016-02-01', 100000);
+                    localStorage.setItem('zandaka_0_2016-02-02', 200000);
+                    localStorage.setItem('zandaka_1_2016-02-02', 100000);
+                    localStorage.setItem('zandaka_2_2016-02-02', 0);
+                    localStorage.setItem('zandaka_3_2016-02-02', 100000);
+                    localStorage.setItem('zandaka_0_2016-02-08', 170000);
+                    localStorage.setItem('zandaka_1_2016-02-08', 70000);
+                    localStorage.setItem('zandaka_2_2016-02-08', 0);
+                    localStorage.setItem('zandaka_3_2016-02-08', 100000);
+                    localStorage.setItem('zandaka_0_2016-02-12', 140000);
+                    localStorage.setItem('zandaka_1_2016-02-12', 40000);
+                    localStorage.setItem('zandaka_2_2016-02-12', 0);
+                    localStorage.setItem('zandaka_3_2016-02-12', 100000); //変更！！！！！！！！！！
+                    localStorage.setItem('zandaka_0_2016-02-14', 100000);
+                    localStorage.setItem('zandaka_1_2016-02-14', 0);
+                    localStorage.setItem('zandaka_2_2016-02-14', 0);
+                    localStorage.setItem('zandaka_3_2016-02-14', 100000); //変更！！！！！！！！！！
+                    localStorage.setItem('zandaka_0_2016-02-15', 100000);
+                    localStorage.setItem('zandaka_1_2016-02-15', 50000);
+                    localStorage.setItem('zandaka_2_2016-02-15', 0);
+                    localStorage.setItem('zandaka_3_2016-02-15', 50000); //変更！！！！！！！！！！
+                    localStorage.setItem('zandaka_0_2016-02-19', 70000);
+                    localStorage.setItem('zandaka_1_2016-02-19', 20000);
+                    localStorage.setItem('zandaka_2_2016-02-19', 0);
+                    localStorage.setItem('zandaka_3_2016-02-19', 50000); //変更！！！！！！！！！！
+                    refreshAccount();
+                });
+
+            });
+        </script>
+
+
+        <hr>
+        <h3>使い方</h3>
+        <h4>6秒で分かる！スマホ利用ガイド</h4>
+        <iframe src="https://vine.co/v/irxVXIiBdKw/embed/simple" width="300" height="300" frameborder="0"></iframe>
+        <script src="https://platform.vine.co/static/scripts/embed.js"></script>
+
+        <hr>
+        <h3>ここから実装したいこと</h3> 現在の年月日を取得する（「input type date」でもユーザーが選択可能）
+        <br> →ユーザーが現在の財布の残りをスライダーで入力
+        <br> →localStorageにkey=年月日、value=金額を自動で記録する
+        <br> →記録されたlocalStorageからグラフを描画する
+        <br>
+
+        <hr>
+        <h3>砂場</h3>
+
+        <script language="JavaScript">
+            <!--
+            function myTimeprev() {
+                var Nowymdhms　 = 　new Date();
+                var NowYear = Nowymdhms.getFullYear();
+                var NowMon = Nowymdhms.getMonth() + 1;
+                var NowDay = Nowymdhms.getDate();
+                var NowWeek = Nowymdhms.getDay();
+                var NowHour = Nowymdhms.getHours();
+                var NowMin = Nowymdhms.getMinutes();
+                var NowSec = Nowymdhms.getSeconds();
+                var Week = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+                myMsg = NowYear + "年" + NowMon + "月" + NowDay + "日(" + Week[NowWeek] + ")" + NowHour + "時" + NowMin + "分" + NowSec + "秒";
+                document.myTime.myMsg.value = myMsg;
+            }
+            // -->
+        </script>
+        <script language="JavaScript">
+            <!--
+            setInterval("myTimeprev()", 1000);
+            // -->
+        </script>
+        <form name="myTime">
+            現在時刻：
+            <input type="text" size="40" name="myMsg">
+        </form>
+
+        <h4>メモ帳（入力すると自動保存：ブラウザ更新しても残る）</h4>
+
+        <textarea id="memo" rows="10" cols="40" name="40"></textarea>
+        <p>
+            <input type="button" id="clear" value="消去">
+        </p>
+        <script>
+            $(function () {
+                if (localStorage.getItem('memo')) {
+                    $('#memo').val(localStorage.getItem('memo'));
+                }
+
+                /* ボタン 消去 */
+                $('#clear').click(function () {
+                    $('#memo').val('');
+                    localStorage.removeItem('memo');
+                });
+
+
+                /* リアルタイム保存 */
+                $('#memo').bind('keyup', function () {
+                    localStorage.setItem('memo', $('#memo').val());
+                });
+
+            });
+        </script>
+
+
+    </div>
+
+    <!-- footer -->
+    <div id="footer" style="color:#FFFFFF; text-align:right; padding-right:10px; background:#000000;">
+        2016 kinaphar
+    </div>
+
+</body>
+
+</html>

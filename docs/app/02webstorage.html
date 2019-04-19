@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#saveButton').click(function () {
+                if (window.localStorage) {
+                    var i = localStorage.length + 1;
+                    var s = $('#text1').val();
+                    localStorage.setItem("key"+i, s);
+                }
+            });
+            $('#readButton').click(function () {
+                if (window.localStorage) {
+                    /* alert(localStorage.getItem("key1")); */
+                    alert(localStorage.length);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Web Storage</h1>
+    <h2>保存</h2>
+    <div>
+        <input type="text" id="text1">
+        <button type="button" id="saveButton">Save</button>
+    </div>
+    <h2>読込み</h2>
+    <div>
+        <button type="button" id="readButton">Read</button>
+    </div>
+</body>
+
+</html>

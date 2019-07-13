@@ -4,7 +4,7 @@ window.onload=function() {
 	var game = new Game(400,500);  				//✅画面サイズを400*500にする。（このサイズだとスマホでも快適なのでおススメ）
 	
 	//結果ツイート時にURLを貼るため、このゲームのURLをここに記入
-	var url="http://kinaphar.jp/games/donuts/index.html";
+	var url="https://kinaphar.github.io/games/donuts/index.html";
 	url= encodeURI(url); //✅きちんとURLがツイート画面に反映されるようにエンコードする
 	/////////////////////////////////////////////////
 	//✅ゲーム開始前に必要な画像・音を読み込む部分
@@ -23,11 +23,11 @@ window.onload=function() {
 	game.preload([M_Clear]); 				//✅データを読み込んでおく
 		
 	//✅リトライボタン
-	var B_Retry="image/Retry.png";						//✅game.htmlからの相対パス
+	var B_Retry="image/Retry_new.png";						//✅game.htmlからの相対パス
 		game.preload([B_Retry]);					//✅データを読み込んでおく
 
 	//✅ツイートボタン
-	var B_Tweet="image/Tweet.png";						//✅game.htmlからの相対パス
+	var B_Tweet="image/Tweet_new.png";						//✅game.htmlからの相対パス
 		game.preload([B_Tweet]);					//✅データを読み込んでおく		
 
 
@@ -53,10 +53,10 @@ window.onload=function() {
 	var P_Salad0 = "image/salad0.png";			//❗サラダ
 		game.preload([P_Salad0]);
 
-	var P_Maru = "image/maru_donuts_clear.png";					//❗○ボタン
+	var P_Maru = "image/maru_new.png";					//❗○ボタン
 		game.preload([P_Maru]);
 
-	var P_Batsu = "image/batsu_churos_clear.png";					//❗×ボタン
+	var P_Batsu = "image/batsu_new.png";					//❗×ボタン
 		game.preload([P_Batsu]);
 
 	//✅読み込み終わり
@@ -91,8 +91,8 @@ window.onload=function() {
 		time_label.moveTo(280, 20);	
 		time_label.addEventListener(enchant.Event.ENTER_FRAME, function(){
 			var progress = parseInt(game.frame*100/game.fps)/100;
-			time = LIMIT_TIME - parseInt(game.frame*100/game.fps)/100;
-			this.text = "残り" + time.toFixed(2) + "秒";
+			time = (LIMIT_TIME - parseInt(game.frame*100/game.fps)/100).toFixed(2);
+			this.text = "残り" + time + "秒";
 			// タイムが0以下になったらゲームオーバーシーンに移行する
 			if (time <= 0) {
 				
@@ -102,7 +102,7 @@ window.onload=function() {
 				//ゲームオーバー後のテキスト表示
 				S_GameOverText.text="GAMEOVER 記録："+Correct+"問正解";				//✅テキストに文字表示 
 				S_AnswerText.text = "これ" + CorrectAnswer[State];				//❗正しい答えを表示 }
-				S_GameOverTime.text = "残り" + time.toFixed(2) + "秒";
+				S_GameOverTime.text = "残り" + time + "秒";
 			};
 		});
 		S_MAIN.addChild(time_label);
@@ -133,8 +133,8 @@ window.onload=function() {
 
 
 		//❗○ボタン
-		var Maru = new Sprite(100, 100)
-		Maru.moveTo(250, 380);
+		var Maru = new Sprite(120, 120)
+		Maru.moveTo(240, 370);
 		Maru.image = game.assets[P_Maru];
 		S_MAIN.addChild(Maru);
 
@@ -174,8 +174,8 @@ window.onload=function() {
 
 
 		//❗×ボタン
-		var Batsu = new Sprite(100, 100)
-		Batsu.moveTo(50, 380);
+		var Batsu = new Sprite(120, 120)
+		Batsu.moveTo(40, 370);
 		Batsu.image = game.assets[P_Batsu];
 		S_MAIN.addChild(Batsu);
 
@@ -245,7 +245,7 @@ window.onload=function() {
 		////////////////////////////////////////////////////////////////
 		//✅結果画面
 		 S_END=new Scene();
-		 S_END.backgroundColor="blue";
+		 S_END.backgroundColor="navy";				//🔵青く染める
 
 		//✅GAMEOVER
 		var S_GameOverText=new Label(); 					//✅テキストはLabelクラス
@@ -271,8 +271,8 @@ window.onload=function() {
 		S_END.addChild(S_AnswerText);						//✅S_ENDシーンにこの画像を埋め込む
 		
 		//✅リトライボタン
-		var S_Retry=new Sprite(120,60);				//✅画像サイズをここに書く。使う予定の画像サイズはプロパティで見ておくこと
-		S_Retry.moveTo(50,300);						//✅コインボタンの位置
+		var S_Retry=new Sprite(360,200);				//✅画像サイズをここに書く。使う予定の画像サイズはプロパティで見ておくこと
+		S_Retry.moveTo(20,300);						//✅コインボタンの位置
 		S_Retry.image = game.assets[B_Retry];			//✅読み込む画像の相対パスを指定。　事前にgame.preloadしてないと呼び出せない
 		S_END.addChild(S_Retry);					//✅S_MAINにこのコイン画像を貼り付ける  
 		
@@ -282,20 +282,20 @@ window.onload=function() {
 			Correct=0;
 			game.frame = 0;
 			game.popScene();						//✅S_ENDシーンを外す
-			S_END.backgroundColor="blue";				//🔵青く染め直す
+			S_END.backgroundColor="navy";				//🔵青く染め直す
 			game.pushScene(S_MAIN);					//✅S_MAINシーンを入れる
 		};		
 
 		//✅ツイートボタン
-		var S_Tweet=new Sprite(120,60);				//✅画像サイズをここに書く。使う予定の画像サイズはプロパティで見ておくこと
-		S_Tweet.moveTo(230,300);						//✅コインボタンの位置
+		var S_Tweet=new Sprite(360,100);				//✅画像サイズをここに書く。使う予定の画像サイズはプロパティで見ておくこと
+		S_Tweet.moveTo(20,220);						//✅コインボタンの位置
 		S_Tweet.image = game.assets[B_Tweet];			//✅読み込む画像の相対パスを指定。　事前にgame.preloadしてないと呼び出せない
 		S_END.addChild(S_Tweet);					//✅S_MAINにこのコイン画像を貼り付ける  
 		
 		S_Tweet.ontouchend=function(){				//✅S_Tweetボタンをタッチした（タッチして離した）時にこの中の内容を実行する
 			//✅ツイートＡＰＩに送信
 			
-			window.open("http://twitter.com/intent/tweet?text=「これドーナツ？ 〜画像認証トレーニング〜」 に"+Correct+"問正解した！" + S_GameOverTime.text + "&hashtags=ahoge,これドーナツ？&hashtags=&url="+url); //ハッシュタグにahogeタグ付くようにした。
+			window.open("http://twitter.com/intent/tweet?text=「これドーナツ？ 〜画像認証トレーニング〜」 に"+Correct+"問正解した！" + S_GameOverTime.text + "&hashtags=ahoge,これドーナツ&url="+url); //ハッシュタグにahogeタグ付くようにした。
 		};
 		
 	};

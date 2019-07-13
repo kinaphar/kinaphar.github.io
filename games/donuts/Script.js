@@ -88,7 +88,7 @@ window.onload=function() {
 		var time_label = new Label();
 		time_label.font = "20px Meiryo";				//❗フォントはメイリオ 20px 変えたかったらググってくれ
 		time_label.color = 'rgba(64,26,0,1)';		//❗色　RGB+透明度　今回は白
-		time_label.moveTo(280, 20);	
+		time_label.moveTo(240, 20);	
 		time_label.addEventListener(enchant.Event.ENTER_FRAME, function(){
 			var progress = parseInt(game.frame*100/game.fps)/100;
 			time = (LIMIT_TIME - parseInt(game.frame*100/game.fps)/100).toFixed(2);
@@ -113,9 +113,9 @@ window.onload=function() {
 		Q_Text.font = "24px Meiryo";				//❗フォントはメイリオ 20px 変えたかったらググってくれ
 		Q_Text.color = 'rgba(64,26,0,1)';		//❗色　RGB+透明度　今回は白
 		Q_Text.width=400;							//❗横幅指定　今回画面サイズ400pxなので、width:400pxだと折り返して二行目表示してくれる
-		Q_Text.moveTo(90,320);						//❗移動位置指定
+		Q_Text.moveTo(120,330);						//❗移動位置指定
 		S_MAIN.addChild(Q_Text);					//❗S_MAINシーンにこのテキストを埋め込む
-		Q_Text.text="「これドーナツ」？";
+		Q_Text.text="これドーナツ？";
 
 
 		//❗サラダ群
@@ -126,6 +126,7 @@ window.onload=function() {
 			Salad[ i ].image = eval("game.assets[P_Salad[" + i + "]]");
 			Salad[ i ].scaleX *= 0.8;
 			Salad[ i ].scaleY *= 0.8;
+			Salad[ i ].moveTo(0, 10)
 		};
 
 		//❗サラダ
@@ -223,7 +224,7 @@ window.onload=function() {
 		S_Text.font = "20px Meiryo";				//✅フォントはメイリオ 20px 変えたかったらググってくれ
 		S_Text.color = 'rgba(64,26,0,1)';		//✅色　RGB+透明度　今回は白
 		S_Text.width=400;							//✅横幅指定　今回画面サイズ400pxなので、width:400pxだと折り返して二行目表示してくれる
-		S_Text.moveTo(10,20);						//✅移動位置指定
+		S_Text.moveTo(40,20);						//✅移動位置指定
 		S_MAIN.addChild(S_Text);					//✅S_MAINシーンにこのテキストを埋め込む
 		S_Text.text="正解数："+Correct;					//✅テキストに文字表示 Coinは変数なので、ここの数字が増える
 		

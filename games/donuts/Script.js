@@ -17,6 +17,10 @@ window.onload=function() {
 	//❗不正解音読み込み
 	var M_Bad ="bad.mp3";						//✅game.htmlからの相対パス
 		game.preload([M_Bad]); 				//✅データを読み込んでおく
+
+	//❗クリア音読み込み
+	var M_Clear ="clear.mp3";						//✅game.htmlからの相対パス
+	game.preload([M_Clear]); 				//✅データを読み込んでおく
 		
 	//✅リトライボタン
 	var B_Retry="image/Retry.png";						//✅game.htmlからの相対パス
@@ -34,7 +38,7 @@ window.onload=function() {
 		"箱入りドーナツ<br>(ドーナツだよ)", "救命うきわ<br>(ドーナツじゃないよ)", "ドーナツ・チョコ＆ピンク<br>(ドーナツだよ)", "フレンチクルーラー<br>(ドーナツだよ)", "レコードディスク<br>(ドーナツじゃないよ)",
 		"オニオンリング<br>(ドーナツじゃないよ)", "焼きドーナツ<br>(ドーナツだよ)", "光学ディスク<br>(ドーナツじゃないよ)", "ブラックホール<br>(ドーナツじゃないよ)", "ドーナツ・オールドファッション<br>(ドーナツだよ)",
 		"シュシュ<br>(ドーナツじゃないよ)", "円グラフ<br>(ドーナツじゃないよ)", "土星<br>(ドーナツじゃないよ)", "花のレイ<br>(ドーナツじゃないよ)", "チュロス<br>(ドーナツだよ)", 
-		"あんドーナツ<br>(ドーナツだよ)", "ブレスレット<br>(ドーナツじゃないよ)", "皿<br>(ドーナツじゃないよ)", "グラブジャムン<br>(ドーナツだよ)", "円座クッション<br>(ドーナツじゃないよ)"
+		"あんドーナツ<br>(ドーナツだよ)", "ブレスレット<br>(ドーナツじゃないよ)", "皿<br>(ドーナツじゃないよ)", "グラブジャムン<br>(インドのドーナツだよ)", "円座クッション<br>(ドーナツじゃないよ)"
 	);
 
 
@@ -135,13 +139,14 @@ window.onload=function() {
 		S_MAIN.addChild(Maru);
 
 
-		//❗○ボタン押したときの挙動
+		//❗❗❗❗❗○ボタン押したときの挙動❗❗❗❗❗
 		Maru.ontouchend=function(){		//📝✅S_Coinボタンをタッチした（タッチして離した）時にこの中の内容を実行する
 			
 			if(Answer[State] === 1){				//❗正解なら
 				Correct++;								//❗正解数を1増やす
 				game.assets[M_Good].clone().play();		//❗正解の音を鳴らす。
 				if(State === quizes - 1){				// 🔵最終問題正解
+					game.assets[M_Clear].clone().play();		//❗クリアの音を鳴らす。
 					game.popScene();					//✅S_MAINシーンを外す
 					S_END.backgroundColor="orange"
 					game.pushScene(S_END);				//✅S_ENDシーンを読み込ませる
@@ -175,13 +180,14 @@ window.onload=function() {
 		S_MAIN.addChild(Batsu);
 
 
-		//❗×ボタン押したときの挙動
+		//❗❗❗❗❗×ボタン押したときの挙動❗❗❗❗❗
 		Batsu.ontouchend=function(){		//📝✅S_Coinボタンをタッチした（タッチして離した）時にこの中の内容を実行する
 			
 			if(Answer[State] === 0){				//🔵正解の場合
 				Correct++;								//❗正解数を1増やす
 				game.assets[M_Good].clone().play();		//❗正解の音を鳴らす。
 				if(State === quizes - 1){				// 🔵最終問題正解
+					game.assets[M_Clear].clone().play();		//❗クリアの音を鳴らす。
 					game.popScene();					//✅S_MAINシーンを外す
 					S_END.backgroundColor="orange"
 					game.pushScene(S_END);				//✅S_ENDシーンを読み込ませる

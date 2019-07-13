@@ -28,6 +28,14 @@ window.onload=function() {
 	var M_TimeUp ="whistle.mp3";						//✅game.htmlからの相対パス
 	game.preload([M_TimeUp]); 				//✅データを読み込んでおく
 
+	//❗ツイート音読み込み
+	var M_Tweet ="piyo.mp3";						//✅game.htmlからの相対パス
+	game.preload([M_Tweet]); 				//✅データを読み込んでおく
+
+	//❗リトライ音読み込み
+	var M_Retry ="retry.mp3";						//✅game.htmlからの相対パス
+	game.preload([M_Retry]); 				//✅データを読み込んでおく
+
 	//❗BGM読み込み
 	var M_BGM ="chahan_minus4db.mp3";						//✅game.htmlからの相対パス
 	game.preload([M_BGM]); 				//✅データを読み込んでおく
@@ -45,8 +53,8 @@ window.onload=function() {
 	var quizes = 20;		//❗クイズの問題数
 	var Answer = new Array(1,0,1,1,0,  0,1,0,0,1,  0,0,0,0,1,  1,0,0,1,0);		// ❗正解
 	var CorrectAnswer = new Array(
-		"箱入りドーナツ<br>(ドーナツだよ)", "救命うきわ<br>(ドーナツじゃないよ)", "ドーナツ・チョコ＆ピンク<br>(ドーナツだよ)", "フレンチクルーラー<br>(ドーナツだよ)", "レコードディスク<br>(ドーナツじゃないよ)",
-		"オニオンリング<br>(ドーナツじゃないよ)", "焼きドーナツ<br>(ドーナツだよ)", "光学ディスク<br>(ドーナツじゃないよ)", "ブラックホール<br>(ドーナツじゃないよ)", "ドーナツ・オールドファッション<br>(ドーナツだよ)",
+		"箱入りドーナツ<br>(ドーナツだよ)", "救命うきわ<br>(ドーナツじゃないよ)", "ドーナツ(チョコ＆ピンク)<br>(ドーナツだよ)", "フレンチクルーラー<br>(ドーナツだよ)", "レコードディスク<br>(ドーナツじゃないよ)",
+		"オニオンリング<br>(ドーナツじゃないよ)", "焼きドーナツ<br>(ドーナツだよ)", "光学ディスク<br>(ドーナツじゃないよ)", "ブラックホール<br>(ドーナツじゃないよ)", "オールドファッション<br>(ドーナツだよ)",
 		"シュシュ<br>(ドーナツじゃないよ)", "円グラフ<br>(ドーナツじゃないよ)", "土星<br>(ドーナツじゃないよ)", "花のレイ<br>(ドーナツじゃないよ)", "チュロス<br>(ドーナツだよ)", 
 		"あんドーナツ<br>(ドーナツだよ)", "ブレスレット<br>(ドーナツじゃないよ)", "皿<br>(ドーナツじゃないよ)", "グラブジャムン<br>(インドのドーナツだよ)", "円座クッション<br>(ドーナツじゃないよ)"
 	);
@@ -148,8 +156,12 @@ window.onload=function() {
 		S_MAIN.addChild(Maru);
 
 		//❗❗❗❗❗○ボタン押したときの挙動❗❗❗❗❗
+		Maru.ontouchstart=function(){
+			Maru.moveTo(240, 375);
+		};
+
 		Maru.ontouchend=function(){		//📝✅S_Coinボタンをタッチした（タッチして離した）時にこの中の内容を実行する
-			
+			Maru.moveTo(240, 370);
 			if(Answer[State] === 1){				//❗正解なら
 				Correct++;								//❗正解数を1増やす
 				game.assets[M_Good].clone().play();		//❗正解の音を鳴らす。
@@ -189,8 +201,12 @@ window.onload=function() {
 
 
 		//❗❗❗❗❗×ボタン押したときの挙動❗❗❗❗❗
+		Batsu.ontouchstart=function(){
+			Batsu.moveTo(40, 375);
+		};
+
 		Batsu.ontouchend=function(){		//📝✅S_Coinボタンをタッチした（タッチして離した）時にこの中の内容を実行する
-			
+			Batsu.moveTo(40, 370);
 			if(Answer[State] === 0){				//🔵正解の場合
 				Correct++;								//❗正解数を1増やす
 				game.assets[M_Good].clone().play();		//❗正解の音を鳴らす。
@@ -268,7 +284,7 @@ window.onload=function() {
 		S_GameOverTime.width=400;							//✅横幅指定　今回画面サイズ400pxなので、width:400pxだと折り返して二行目表示してくれる
 		S_GameOverTime.moveTo(280, 30);
 		S_END.addChild(S_GameOverTime);
-		
+
 		//❗これ○○だ
 		var S_AnswerText=new Label(); 					//✅テキストはLabelクラス
 		S_AnswerText.font = "30px Meiryo";				//✅フォントはメイリオ 20px 変えたかったらググってくれ
@@ -276,14 +292,20 @@ window.onload=function() {
 		S_AnswerText.width=300;							//✅横幅指定　今回画面サイズ400pxなので、width:400pxだと折り返して二行目表示してくれる
 		S_AnswerText.moveTo(50,100);						//✅移動位置指定
 		S_END.addChild(S_AnswerText);						//✅S_ENDシーンにこの画像を埋め込む
-		
+
 		//✅リトライボタン
 		var S_Retry=new Sprite(360,200);				//✅画像サイズをここに書く。使う予定の画像サイズはプロパティで見ておくこと
 		S_Retry.moveTo(20,300);						//✅コインボタンの位置
 		S_Retry.image = game.assets[B_Retry];			//✅読み込む画像の相対パスを指定。　事前にgame.preloadしてないと呼び出せない
 		S_END.addChild(S_Retry);					//✅S_MAINにこのコイン画像を貼り付ける  
-		
+
+		S_Retry.ontouchstart=function(){
+			S_Retry.moveTo(20,305);
+		};
+
 		S_Retry.ontouchend=function(){				//✅S_Retryボタンをタッチした（タッチして離した）時にこの中の内容を実行する
+			S_Retry.moveTo(20,300);
+			game.assets[M_Retry].clone().play();
 			S_MAIN.removeChild(Salad[State]);	  //❗サラダ消しとく
 			State=0;
 			Correct=0;
@@ -297,14 +319,17 @@ window.onload=function() {
 		var S_Tweet=new Sprite(360,100);				//✅画像サイズをここに書く。使う予定の画像サイズはプロパティで見ておくこと
 		S_Tweet.moveTo(20,220);						//✅コインボタンの位置
 		S_Tweet.image = game.assets[B_Tweet];			//✅読み込む画像の相対パスを指定。　事前にgame.preloadしてないと呼び出せない
-		S_END.addChild(S_Tweet);					//✅S_MAINにこのコイン画像を貼り付ける  
-		
+		S_END.addChild(S_Tweet);					//✅S_MAINにこのコイン画像を貼り付ける
+		S_Tweet.ontouchstart=function(){
+			S_Tweet.moveTo(20,225);
+		};
 		S_Tweet.ontouchend=function(){				//✅S_Tweetボタンをタッチした（タッチして離した）時にこの中の内容を実行する
 			//✅ツイートＡＰＩに送信
-			
+			S_Tweet.moveTo(20,220);
+			game.assets[M_Tweet].clone().play();
 			window.open("http://twitter.com/intent/tweet?text=「これドーナツ？ 〜画像認証トレーニング〜」 に"+Correct+"問正解した！" + S_GameOverTime.text + "&hashtags=ahoge,これドーナツ&url="+url); //ハッシュタグにahogeタグ付くようにした。
 		};
-		
+
 	};
 	game.start();
 };

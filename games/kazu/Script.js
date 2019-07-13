@@ -4,7 +4,7 @@ window.onload = function () {
 	var game = new Game(700, 800);  				//画面サイズを400*500にする。（このサイズだとスマホでも快適なのでおススメ）
 
 	//結果ツイート時にURLを貼るため、このゲームのURLをここに記入
-	var url = "https://twitter.com/hothukurou";
+	var url = "https://kinaphar.github.io/games/kazu/";
 	url = encodeURI(url); //きちんとURLがツイート画面に反映されるようにエンコードする
 	/////////////////////////////////////////////////
 	//ゲーム開始前に必要な画像・音を読み込む部分

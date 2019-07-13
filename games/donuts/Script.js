@@ -295,7 +295,7 @@ window.onload=function() {
 		S_Tweet.ontouchend=function(){				//✅S_Tweetボタンをタッチした（タッチして離した）時にこの中の内容を実行する
 			//✅ツイートＡＰＩに送信
 			
-			window.open("http://twitter.com/intent/tweet?text=「これさらだ」？ に"+Correct+"問正解した！" + S_GameOverTime.text + "&hashtags=ahoge,これさらだ？&hashtags=&url="+url); //ハッシュタグにahogeタグ付くようにした。
+			window.open("http://twitter.com/intent/tweet?text=「これドーナツ？ 〜画像認証トレーニング〜」 に"+Correct+"問正解した！" + S_GameOverTime.text + "&hashtags=ahoge,これドーナツ？&hashtags=&url="+url); //ハッシュタグにahogeタグ付くようにした。
 		};
 		
 	};

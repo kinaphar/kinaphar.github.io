@@ -31,10 +31,10 @@ window.onload=function() {
 	var quizes = 20;		//❗クイズの問題数
 	var Answer = new Array(1,0,1,1,0,  0,1,0,0,1,  0,0,0,0,1,  1,0,0,1,0);		// ❗正解
 	var CorrectAnswer = new Array(
-		"箱入りドーナツ（ドーナツだよ）", "救命うきわ（ドーナツじゃないよ）", "ドーナツ・チョコ＆ピンク（ドーナツだよ）", "フレンチクルーラー（ドーナツだよ）", "レコードディスク（ドーナツじゃないよ）",
-		"オニオンリング（ドーナツじゃないよ）", "焼きドーナツ（ドーナツだよ）", "光学ディスク（ドーナツじゃないよ）", "ブラックホール（ドーナツじゃないよ）", "ドーナツ・オールドファッション（ドーナツだよ）",
-		"シュシュ（ドーナツじゃないよ）", "円グラフ（ドーナツじゃないよ）", "土星（ドーナツじゃないよ）", "花のレイ（ドーナツじゃないよ）", "チュロス（ドーナツだよ）", 
-		"あんドーナツ（ドーナツだよ）", "ブレスレット（ドーナツじゃないよ）", "皿（ドーナツじゃないよ）", "グラブジャムン（ドーナツだよ）", "円座クッション（ドーナツじゃないよ）"
+		"箱入りドーナツ<br>(ドーナツだよ)", "救命うきわ<br>(ドーナツじゃないよ)", "ドーナツ・チョコ＆ピンク<br>(ドーナツだよ)", "フレンチクルーラー<br>(ドーナツだよ)", "レコードディスク<br>(ドーナツじゃないよ)",
+		"オニオンリング<br>(ドーナツじゃないよ)", "焼きドーナツ<br>(ドーナツだよ)", "光学ディスク<br>(ドーナツじゃないよ)", "ブラックホール<br>(ドーナツじゃないよ)", "ドーナツ・オールドファッション<br>(ドーナツだよ)",
+		"シュシュ<br>(ドーナツじゃないよ)", "円グラフ<br>(ドーナツじゃないよ)", "土星<br>(ドーナツじゃないよ)", "花のレイ<br>(ドーナツじゃないよ)", "チュロス<br>(ドーナツだよ)", 
+		"あんドーナツ<br>(ドーナツだよ)", "ブレスレット<br>(ドーナツじゃないよ)", "皿<br>(ドーナツじゃないよ)", "グラブジャムン<br>(ドーナツだよ)", "円座クッション<br>(ドーナツじゃないよ)"
 	);
 
 
@@ -141,13 +141,18 @@ window.onload=function() {
 			if(Answer[State] === 1){				//❗正解なら
 				Correct++;								//❗正解数を1増やす
 				game.assets[M_Good].clone().play();		//❗正解の音を鳴らす。
+				if(State === quizes - 1){				// 🔵最終問題正解
+					game.popScene();					//✅S_MAINシーンを外す
+					S_END.backgroundColor="orange"
+					game.pushScene(S_END);				//✅S_ENDシーンを読み込ませる
+					S_GameOverText.text="CLEAR!!! 記録："+Correct+"問正解";				//✅テキストに文字表示 
+					S_AnswerText.text = "これ" + CorrectAnswer[State];				//❗正しい答えを表示 
+					S_GameOverTime.text = "残り" + time + "秒";
+				};
 			};
 
-			if(Answer[State] === 0 || State === quizes - 1){
-				if (State !== quizes - 1){
-					game.assets[M_Bad].clone().play();		//❗不正解の音を鳴らす。
-				}	
-				
+			if(Answer[State] === 0){
+				game.assets[M_Bad].clone().play();		//❗不正解の音を鳴らす。
 				game.popScene();					//✅S_MAINシーンを外す
 				game.pushScene(S_END);				//✅S_ENDシーンを読み込ませる
 				
@@ -173,15 +178,22 @@ window.onload=function() {
 		//❗×ボタン押したときの挙動
 		Batsu.ontouchend=function(){		//📝✅S_Coinボタンをタッチした（タッチして離した）時にこの中の内容を実行する
 			
-			if(Answer[State] === 0){				//❗正解なら
-			Correct++;								//❗正解数を1増やす
-			game.assets[M_Good].clone().play();		//❗正解の音を鳴らす。
+			if(Answer[State] === 0){				//🔵正解の場合
+				Correct++;								//❗正解数を1増やす
+				game.assets[M_Good].clone().play();		//❗正解の音を鳴らす。
+				if(State === quizes - 1){				// 🔵最終問題正解
+					game.popScene();					//✅S_MAINシーンを外す
+					S_END.backgroundColor="orange"
+					game.pushScene(S_END);				//✅S_ENDシーンを読み込ませる
+					S_GameOverText.text="CLEAR!!! 記録："+Correct+"問正解";				//✅テキストに文字表示 
+					S_AnswerText.text = "これ" + CorrectAnswer[State];				//❗正しい答えを表示 
+					S_GameOverTime.text = "残り" + time + "秒";
+				};
 			};
 
-			if(Answer[State] === 1 || State === quizes - 1){
-				if (State !== quizes - 1){
-					game.assets[M_Bad].clone().play();		//❗不正解の音を鳴らす。
-				}	
+			
+			if(Answer[State] === 1){			//🔵不正解の場合
+				game.assets[M_Bad].clone().play();		//❗不正解の音を鳴らす。
 				
 				game.popScene();					//✅S_MAINシーンを外す
 				game.pushScene(S_END);				//✅S_ENDシーンを読み込ませる

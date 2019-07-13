@@ -282,6 +282,7 @@ window.onload=function() {
 			Correct=0;
 			game.frame = 0;
 			game.popScene();						//✅S_ENDシーンを外す
+			S_END.backgroundColor="blue";				//🔵青く染め直す
 			game.pushScene(S_MAIN);					//✅S_MAINシーンを入れる
 		};		
 

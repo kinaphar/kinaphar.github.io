@@ -1,5 +1,7 @@
 enchant();
 
+enchant.Sound.enabledInMobileSafari = true;
+
 window.onload=function() {
 	var game = new Game(400,500);  				//✅画面サイズを400*500にする。（このサイズだとスマホでも快適なのでおススメ）
 	
@@ -22,6 +24,14 @@ window.onload=function() {
 	var M_Clear ="clear.mp3";						//✅game.htmlからの相対パス
 	game.preload([M_Clear]); 				//✅データを読み込んでおく
 		
+	//❗タイムアップ音読み込み
+	var M_TimeUp ="whistle.mp3";						//✅game.htmlからの相対パス
+	game.preload([M_TimeUp]); 				//✅データを読み込んでおく
+
+	//❗BGM読み込み
+	var M_BGM ="chahan_minus4db.mp3";						//✅game.htmlからの相対パス
+	game.preload([M_BGM]); 				//✅データを読み込んでおく
+
 	//✅リトライボタン
 	var B_Retry="image/Retry_new.png";						//✅game.htmlからの相対パス
 		game.preload([B_Retry]);					//✅データを読み込んでおく
@@ -62,9 +72,7 @@ window.onload=function() {
 	//✅読み込み終わり
 	/////////////////////////////////////////////////
 	
-	
 	game.onload = function() {					//✅ロードが終わった後にこの関数が呼び出されるので、この関数内にゲームのプログラムを書こう
-
 
 		/////////////////////////////////////////////////
 		//✅グローバル変数 
@@ -75,7 +83,6 @@ window.onload=function() {
 
 		// ❗グローバル変数追加
 
-		
 		//✅グローバル変数終わり
 		/////////////////////////////////////////////////
 		
@@ -96,6 +103,7 @@ window.onload=function() {
 			// タイムが0以下になったらゲームオーバーシーンに移行する
 			if (time <= 0) {
 				
+				game.assets[M_TimeUp].clone().play();
 				game.popScene();					//✅S_MAINシーンを外す
 				game.pushScene(S_END);				//✅S_ENDシーンを読み込ませる
 				
@@ -134,11 +142,10 @@ window.onload=function() {
 
 
 		//❗○ボタン
-		var Maru = new Sprite(120, 120)
+		var Maru = new Sprite(120, 120);
 		Maru.moveTo(240, 370);
 		Maru.image = game.assets[P_Maru];
 		S_MAIN.addChild(Maru);
-
 
 		//❗❗❗❗❗○ボタン押したときの挙動❗❗❗❗❗
 		Maru.ontouchend=function(){		//📝✅S_Coinボタンをタッチした（タッチして離した）時にこの中の内容を実行する
@@ -238,7 +245,6 @@ window.onload=function() {
 
 			//✅現在のテキスト表示
 			S_Text.text="正解数："+Correct; 				//Coin変数が変化するので、毎フレームごとにCoinの値を読み込んだ文章を表示する
-			
 		};
 		
 		

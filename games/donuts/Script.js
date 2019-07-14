@@ -186,8 +186,8 @@ window.onload=function() {
 				S_GameOverTime.text = "残り" + time + "秒";
 			};
 			
-			State += 1;
-			S_MAIN.removeChild(Salad[State - 1]);
+			S_MAIN.removeChild(Salad[State]);
+			State = (State+1)%quizes;
 			S_MAIN.addChild(Salad[State]);
 		};
 
@@ -232,10 +232,9 @@ window.onload=function() {
 				S_AnswerText.text = "これ" + CorrectAnswer[State];				//❗正しい答えを表示 
 				S_GameOverTime.text = "残り" + time + "秒";
 			};
-			
-			State = (State+1)%20;
 
-			S_MAIN.removeChild(Salad[State - 1]);
+			S_MAIN.removeChild(Salad[State]);
+			State = (State+1)%quizes;
 			S_MAIN.addChild(Salad[State]);
 		};
 		

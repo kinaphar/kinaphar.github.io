@@ -37,7 +37,7 @@ window.onload=function() {
 	game.preload([M_Retry]); 				//✅データを読み込んでおく
 
 	//❗BGM読み込み
-	var M_BGM ="chahan_minus4db.mp3";						//✅game.htmlからの相対パス
+	var M_BGM ="chahan_minus5db.mp3";						//✅game.htmlからの相対パス
 	game.preload([M_BGM]); 				//✅データを読み込んでおく
 
 	//✅リトライボタン

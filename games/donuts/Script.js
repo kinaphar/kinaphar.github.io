@@ -1,6 +1,6 @@
 enchant();
 
-enchant.Sound.enabledInMobileSafari = true;
+enchant.Sound.enabledInMobileSafari = true;					//🔵効果未検証
 
 window.onload=function() {
 	var game = new Game(400,500);  				//✅画面サイズを400*500にする。（このサイズだとスマホでも快適なのでおススメ）
@@ -105,7 +105,6 @@ window.onload=function() {
 		time_label.color = 'rgba(64,26,0,1)';		//❗色　RGB+透明度　今回は白
 		time_label.moveTo(240, 20);	
 		time_label.addEventListener(enchant.Event.ENTER_FRAME, function(){
-			var progress = parseInt(game.frame*100/game.fps)/100;
 			time = (LIMIT_TIME - parseInt(game.frame*100/game.fps)/100).toFixed(2);
 			this.text = "残り" + time + "秒";
 			// タイムが0以下になったらゲームオーバーシーンに移行する
@@ -234,7 +233,7 @@ window.onload=function() {
 				S_GameOverTime.text = "残り" + time + "秒";
 			};
 			
-			State += 1;
+			State = (State+1)%20;
 
 			S_MAIN.removeChild(Salad[State - 1]);
 			S_MAIN.addChild(Salad[State]);
@@ -251,13 +250,70 @@ window.onload=function() {
 		S_MAIN.addChild(S_Text);					//✅S_MAINシーンにこのテキストを埋め込む
 		S_Text.text="正解数："+Correct;					//✅テキストに文字表示 Coinは変数なので、ここの数字が増える
 		
+
+		// BGM用クラス
+		var Bgm = enchant.Class.create({
+				initialize: function(){
+						this.data = null;
+						this.isPlay = false;//プレイの状態フラグ
+						this.isPuase = false;
+				},
+				//BGM用音楽ファイルのセット
+				set: function(data){
+						this.data = data;
+				},
+				//再生(再生のみに使う)
+				play: function(){
+						this.data.play();
+						this.isPlay = true;
+						if(this.data.src != undefined){//srcプロパティを持っている場合
+								this.data.src.loop = true;
+						}
+				},
+				//ループ再生(必ずループ内に記述すること) PCでのループ再生で使う
+				loop: function(){
+						if(this.isPlay == true && this.data.src == undefined){//再生中でsrcプロパティを持っていない場合
+								this.data.play();
+								this.isPuase = false;//ポーズ画面から戻った場合は自動的に再生を再開させるため
+						}else if(this.isPuase){//srcあり場合でポーズ画面から戻ったとき用
+								this.data.play();
+								this.data.src.loop = true;//ポーズするとfalseになるっぽい(確認はしていない)
+								this.isPuase = false;
+						}
+				},
+				//再生停止(曲を入れ替える前は,必ずstop()させる)
+				stop: function(){
+						if(this.data != null){
+								if(this.isPuase){
+										this.isPlay = false;
+										this.isPuase = false;
+										this.data.currentTime = 0;
+								}else if(this.isPlay){
+										this.data.stop();
+										this.isPlay = false;
+								}
+						}
+				},
+				//一時停止（ポーズ画面などの一時的な画面の切り替え時に音を止めたいときのみ使う）
+				pause: function(){
+						if(this.data != null){
+								this.data.pause();
+								this.isPuase = true;
+						}
+				}
+		});	
 		
+		var game_bgm = new Bgm();
+		game_bgm.set(game.assets[M_BGM]);
+		game_bgm.play();
+
 		///////////////////////////////////////////////////
 		//📝✅メインループ　ここに主要な処理をまとめて書こう
 		game.onenterframe=function(){
 			if (State === 0){
 				S_MAIN.addChild(Salad[State]);
 			}
+			game_bgm.loop();
 
 			//✅現在のテキスト表示
 			S_Text.text="正解数："+Correct; 				//Coin変数が変化するので、毎フレームごとにCoinの値を読み込んだ文章を表示する
